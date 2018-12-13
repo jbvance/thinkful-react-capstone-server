@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: oCli6BA9RxZ2f5JD/BQcbYMKe6olY1najsDmJGre+TBySUMiE6zniAQEWrAc1XDlUThw8ps/eSsUrZ2flcLZKEARADjoYtwhwayIhHraFx9MBqP35tW2i7Eekrd8X9nxxh2otGriERaArStt+SGQ0+me9bYZljCP6QGU1XnaXZXC//7p0FST3GTTiWrZ1ga0k4vb2j+hu8XjmRaDL4vtDdJoamD79NCGn3+4iYMhF4B153csM/bOQw4DDN2wUjw1rmOlsb0mvzpVWZLWw/b11OosT5o4W2OtAOj4OvboMwQv7z3cWgi6u0VS5FK5DqluM1qNVTvzhRKc1ZbXZ/4ruqbYYUUP8BFuRxIWF+gJttMh38DUdThTrK0ZuyGaPgqhAeY0EScYpD1P10xb2916rml+hfjdmxR+H+TMzvA+XOoQZ4Uct1omEkXIGIsgA8pRKnkgs55U/1/Bow+wtVQDjGlu6rFTXPPFYKdrTFB5PdxQRjji01ZboC9u634K5CtBDu8JOXWYPgzcd5visR6Q+t4iqWeCDmqh4iDZXxtqFijp+6Q0+n9SEVMKAADaL5a++ohLO0XhnYzl91GBZSks7XQeV6LnMXdmU9xUUHGHgvYjSYw5zHs5f0wUzgy6VkAWQ98Kme5vh9dwHnTinpS5G7W+Kfevze9U/pBKanr49J0=
+  app: tranquil-springs-47133
+  on:
+    repo: jbvance/thinkful-react-capstone-server
