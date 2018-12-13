@@ -10,7 +10,7 @@ const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 let { PORT, DATABASE_URL } = require('./config');
 if (process.env.NODE_ENV === 'test') {
-  DATABASE_URL = "mongodb://localhost/jwt-auth-demo";
+  DATABASE_URL = "mongodb://localhost/react-capstone-test";
 }
 
 const app = express();
