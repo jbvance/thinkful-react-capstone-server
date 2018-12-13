@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "cross-env NODE_ENV=test mocha --exit",
     "dev": "nodemon server.js"
-  },
+  },  
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "10.14.2"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
