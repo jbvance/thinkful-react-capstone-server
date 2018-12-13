@@ -7,13 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 
-const createAuthToken = function(user) {
-  return jwt.sign({user}, config.JWT_SECRET, {
-    subject: user.email,
-    expiresIn: config.JWT_EXPIRY,
-    algorithm: 'HS256'
-  });
-};
+const { createAuthToken} = require('../utils');
 
 const localAuth = passport.authenticate('local', {session: false});
 // parse application/x-www-form-urlencoded

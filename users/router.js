@@ -1,12 +1,11 @@
 'use strict';
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const {User} = require('./model');
-
 const router = express.Router();
-
 const jsonParser = bodyParser.json();
+const { User } = require('./model');
+const { createAuthToken } = require('../utils');
+
 
 // Post to register a new user
 router.post('/', jsonParser, (req, res) => {
@@ -83,9 +82,9 @@ router.post('/', jsonParser, (req, res) => {
       code: 422,
       reason: 'ValidationError',
       message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField]
+        ? `${tooSmallField} must be at least ${sizedFields[tooSmallField]
           .min} characters long`
-        : `Must be at most ${sizedFields[tooLargeField]
+        : `${tooLargeField} must be at most ${sizedFields[tooLargeField]
           .max} characters long`,
       location: tooSmallField || tooLargeField
     });
@@ -120,8 +119,12 @@ router.post('/', jsonParser, (req, res) => {
         lastName
       });
     })
-    .then(user => {
-      return res.status(201).json(user.serialize());
+    .then(user => {     
+      const authToken = createAuthToken(user.serialize());            
+      return res.status(201).json({
+          user: user.serialize(), 
+          authToken
+        });
     })
     .catch(err => {
       // Forward validation errors on to the client, otherwise give a 500
@@ -129,7 +132,7 @@ router.post('/', jsonParser, (req, res) => {
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
-      res.status(500).json({code: 500, message: 'Internal server error'});
+      res.status(500).json({code: 500, message: 'Internal server error - ' + err});
     });
 });
 
