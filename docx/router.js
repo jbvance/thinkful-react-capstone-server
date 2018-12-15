@@ -8,7 +8,7 @@ const docxTemplater = require('./docxTemplater');
 
 //ROUTES FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
-router.post('/api/makedoc', jsonParser, async (req, res, next) => { 
+router.post('/makedoc', jsonParser, async (req, res, next) => { 
   //console.log("REQUEST BODY", req.body)      
   try {
     const postResults = await docxTemplater.saveDoc(req.body);
