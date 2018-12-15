@@ -38,6 +38,14 @@ app.use('/api/auth/', authRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/docx', docxRouter);
 
+// Route used by UptimeRobot.com to ping every 20 minutes
+// to keep heroku app from falling asleep
+app.get('/keep-alive', (req, res) => {
+  res.json({
+    status: 'Alive'
+  })
+});
+
 let server;
 
 function runServer() {
