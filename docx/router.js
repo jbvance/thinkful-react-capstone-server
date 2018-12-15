@@ -1,14 +1,20 @@
 'use strict';
 const express = require('express');
-const bodyParser = require('body-parser');
 const router = express.Router();
-const jsonParser = bodyParser.json();
+const passport = require('passport');
 const s3 = require('./uploadToS3');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const docxTemplater = require('./docxTemplater');
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+router.use(jsonParser);
+router.use(jwtAuth);
 
 //ROUTES FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
-router.post('/makedoc', jsonParser, async (req, res, next) => { 
+router.post('/makedoc', async (req, res, next) => { 
   //console.log("REQUEST BODY", req.body)      
   try {
     const postResults = await docxTemplater.saveDoc(req.body);
@@ -20,11 +26,11 @@ router.post('/makedoc', jsonParser, async (req, res, next) => {
   
 });
 
-router.post('/test', jsonParser, function(req, res) {
+router.post('/test', function(req, res) {
     res.json(req.body);
 });
     
-router.get('/download/:filename', jsonParser, (req, res, next) => {
+router.get('/download/:filename', (req, res, next) => {
 s3.downloadFile(req.params.filename)
     .then(data => {            
         res.send(data.Body);
