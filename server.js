@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { router: docxRouter } = require ('./docx/router');
 
 let { PORT, DATABASE_URL } = require('./config');
 if (process.env.NODE_ENV === 'test') {
@@ -35,6 +36,7 @@ passport.use(jwtStrategy);
 
 app.use('/api/auth/', authRouter);
 app.use('/api/users/', usersRouter);
+app.use('/api/docx', docxRouter);
 
 let server;
 
