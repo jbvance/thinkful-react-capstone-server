@@ -3,14 +3,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+const s3 = require('./uploadToS3');
+const docxTemplater = require('./docxTemplater');
 
-// ROUTES FOR MAKING DOCX DOCUMENT
-// This is the primary route for creating documents with posted data
-// router.post('/api/makedoc', jsonParser, catchErrors(async (req, res, next) => { 
-//   //console.log("REQUEST BODY", req.body)      
-//   const postResults = await docxTemplater.saveDoc(req.body);
-//   res.status(200).json(postResults)   
-// }));
+//ROUTES FOR MAKING DOCX DOCUMENT
+//This is the primary route for creating documents with posted data
+router.post('/api/makedoc', jsonParser, async (req, res, next) => { 
+  //console.log("REQUEST BODY", req.body)      
+  try {
+    const postResults = await docxTemplater.saveDoc(req.body);
+    res.status(200).json(postResults)   
+  }
+  catch (err) {
+      res.status(400).json(err);
+  }
+  
+});
 
 router.post('/test', jsonParser, function(req, res) {
     res.json(req.body);
