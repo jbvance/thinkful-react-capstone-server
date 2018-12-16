@@ -18,8 +18,9 @@ router.use(jwtAuth);
 
 //ROUTES FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
-router.post('/', async (req, res, next) => { 
+router.post('/', jwtAuth, async (req, res, next) => { 
 
+    console.log('BODY', req.body);
     const requiredFields = ['fullName', 'address', 'agents', 'effectiveNow'];
     const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -45,19 +46,6 @@ router.post('/', async (req, res, next) => {
         location: nonStringField
       });
     }  
-
-    const booleanFields = ['effectiveNow'];    
-    const nonBooleanField = booleanFields.find(
-      field => field in req.body && typeof req.body[field] !== 'boolean'
-    );
-    if (nonBooleanField) {
-        return res.status(422).json({
-            code: 422,
-            reason: 'ValidationError',
-            message: 'Incorrect field type: expected boolean',
-            location: nonBooleanField
-          });
-    }
     
   try {
       // add dpoa data to database  
