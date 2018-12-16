@@ -116,7 +116,7 @@ describe('Auth endpoints', function () {
             algorithm: ['HS256']
           });          
           expect(payload.user).to.deep.equal({
-            email,
+            email: email.toLowerCase(),
             firstName,
             lastName,
             id: id.toString()

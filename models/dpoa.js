@@ -39,7 +39,7 @@ const dpoaSchema = new Schema({
         ref: 'User',
         required: true
     },
-});
+}, {timestamps: true });
 
 const Dpoa = mongoose.model('dpoa', dpoaSchema);
 

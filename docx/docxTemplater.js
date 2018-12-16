@@ -9,10 +9,9 @@ const path = require('path');
 //Load the docx file as a binary
 module.exports = {
     saveDoc: (bodyContent => {
-        console.log("BODY CONTENT IN SAVEDOC", bodyContent)
+        //console.log("BODY CONTENT IN SAVEDOC", bodyContent)
         const outputFileName = `${uuidv4()}.docx`
-        const data = bodyContent.body;        
-        console.log("data", data)
+        const data = bodyContent;        
         const content = fs
             .readFileSync(path.resolve(__dirname, 'dpoa-1.docx'), 'binary');
 
