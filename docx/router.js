@@ -13,13 +13,10 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.use(jsonParser);
 
-// require authentication on all routes in router
-router.use(jwtAuth);
-
-//ROUTES FOR MAKING DOCX DOCUMENT
+//ROUTE FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
-router.post('/', async (req, res, next) => { 
-   
+router.post('/', jwtAuth, async (req, res, next) => { 
+   try {
     const requiredFields = ['fullName', 'address', 'agents', 'effectiveNow'];
     const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -67,7 +64,7 @@ router.post('/', async (req, res, next) => {
      req.body['effectiveNow'] = false;
    }
     
-  try {
+
       // add dpoa data to database  
     await Dpoa.findOneAndUpdate(
         { principal: req.user.id }, 
@@ -83,7 +80,41 @@ router.post('/', async (req, res, next) => {
   }  
 });
 
-router.get('/:filename', (req, res, next) => {
+// Get the Dpoa data for an existing user
+router.get('/:userId', jwtAuth, async (req, res, next) => {    
+  
+  try {  
+
+    let returnData = {};
+
+    if (!req.params.userId) {
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Missing field',
+        location: 'id'
+      });
+    }  
+      // add dpoa data to database  
+    let dpoaData = await Dpoa.findOne({ principal: req.params.userId });
+    if (!dpoaData) {
+      returnData = {}
+    } else {
+      returnData = {
+        fullName: dpoaData.fullName,
+        address: dpoaData.address,
+        agents: dpoaData.agents,
+        effectiveNow: dpoaData.effectiveNow
+      };
+    }
+    res.status(200).json(returnData);  
+  }
+  catch (err) {
+      res.status(400).json(err);
+  }  
+});
+
+router.get('/files/:filename', (req, res, next) => {
 s3.downloadFile(req.params.filename)
     .then(data => {            
         res.send(data.Body);
