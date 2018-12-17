@@ -18,7 +18,7 @@ router.use(jwtAuth);
 
 //ROUTES FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
-router.post('/', jwtAuth, async (req, res, next) => { 
+router.post('/', async (req, res, next) => { 
 
     console.log('BODY', req.body);
     const requiredFields = ['fullName', 'address', 'agents', 'effectiveNow'];
@@ -32,6 +32,8 @@ router.post('/', jwtAuth, async (req, res, next) => {
         location: missingField
       });
     }
+
+    console.log('TYPE OF effectiveNow', typeof req.body['effectiveNow']);
   
     const stringFields = ['fullName', 'address'];    
     const nonStringField = stringFields.find(
@@ -46,6 +48,27 @@ router.post('/', jwtAuth, async (req, res, next) => {
         location: nonStringField
       });
     }  
+
+    //select options come in as string, so check if equal to "true" or "false"
+    const booleanFields = ['effectiveNow'];    
+    const nonBooleanField = booleanFields.find(
+      field => field in req.body && req.body[field].toLowerCase() !== 'true' && req.body[field].toLowerCase() !== 'false'
+    );
+  
+    if (nonBooleanField) {
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Incorrect field type: expected boolean',
+        location: nonBooleanField
+      });
+    } 
+
+   if (req.body['effectiveNow'] === 'true') {
+     req.body['effectiveNow'] = true;
+   } else if (req.body['effectiveNow'] === 'false') {
+     req.body['effectiveNow'] = false;
+   }
     
   try {
       // add dpoa data to database  
@@ -54,14 +77,13 @@ router.post('/', jwtAuth, async (req, res, next) => {
         {...req.body, principal: req.user.id }, 
         { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
     
-    // Now create the .docx document and save it to AWS S3
+    // Now create the .docx document and save it to AWS S3 bucket
     const postResults = await docxTemplater.saveDoc(req.body);
     res.status(200).json(postResults)   
   }
   catch (err) {
       res.status(400).json(err);
-  }
-  
+  }  
 });
 
 router.get('/:filename', (req, res, next) => {
