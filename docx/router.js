@@ -7,7 +7,7 @@ const s3 = require('./uploadToS3');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const docxTemplater = require('./docxTemplater');
-const Dpoa = require('./../models/dpoa');
+const Dpoa = require('./model');
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
@@ -19,8 +19,7 @@ router.use(jwtAuth);
 //ROUTES FOR MAKING DOCX DOCUMENT
 //This is the primary route for creating documents with posted data
 router.post('/', async (req, res, next) => { 
-
-    console.log('BODY', req.body);
+   
     const requiredFields = ['fullName', 'address', 'agents', 'effectiveNow'];
     const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -32,9 +31,7 @@ router.post('/', async (req, res, next) => {
         location: missingField
       });
     }
-
-    console.log('TYPE OF effectiveNow', typeof req.body['effectiveNow']);
-  
+      
     const stringFields = ['fullName', 'address'];    
     const nonStringField = stringFields.find(
       field => field in req.body && typeof req.body[field] !== 'string'
@@ -52,7 +49,7 @@ router.post('/', async (req, res, next) => {
     //select options come in as string, so check if equal to "true" or "false"
     const booleanFields = ['effectiveNow'];    
     const nonBooleanField = booleanFields.find(
-      field => field in req.body && req.body[field].toLowerCase() !== 'true' && req.body[field].toLowerCase() !== 'false'
+      field => field in req.body && req.body[field] !== 'true' && req.body[field] !== 'false'
     );
   
     if (nonBooleanField) {

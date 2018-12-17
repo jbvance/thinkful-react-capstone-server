@@ -36,7 +36,7 @@ passport.use(jwtStrategy);
 
 app.use('/api/auth/', authRouter);
 app.use('/api/users/', usersRouter);
-app.use('/api/docx', docxRouter);
+app.use('/api/dpoa', docxRouter);
 
 // Route used by UptimeRobot.com to ping every 20 minutes
 // to keep heroku app from falling asleep
