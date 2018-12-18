@@ -10,8 +10,8 @@ const path = require('path');
 module.exports = {
     saveDoc: (bodyContent => {
         //console.log("BODY CONTENT IN SAVEDOC", bodyContent)
-        const outputFileName = `${uuidv4()}.docx`
-        const data = bodyContent;        
+        const data = bodyContent;  
+        const outputFileName = `${data.userId}__${uuidv4()}.docx`      
         const content = fs
             .readFileSync(path.resolve(__dirname, 'dpoa-1.docx'), 'binary');
 

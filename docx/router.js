@@ -72,13 +72,17 @@ router.post('/', jwtAuth, async (req, res, next) => {
         { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
     
     // Now create the .docx document and save it to AWS S3 bucket
-    const postResults = await docxTemplater.saveDoc(req.body);
+    const postResults = await docxTemplater.saveDoc({...req.body, userId: req.user.id });
     res.status(200).json(postResults)   
   }
   catch (err) {
       res.status(400).json(err);
   }  
 });
+
+// router.get('/testing/', (req, res, next) => {
+//   console.log('FILE', s3.listFiles());
+// })
 
 // Get the Dpoa data for an existing user
 router.get('/:userId', jwtAuth, async (req, res, next) => {    
