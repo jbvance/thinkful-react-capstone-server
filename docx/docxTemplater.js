@@ -9,7 +9,6 @@ const path = require('path');
 //Load the docx file as a binary
 module.exports = {
     saveDoc: (bodyContent => {
-        //console.log("BODY CONTENT IN SAVEDOC", bodyContent)
         const data = bodyContent;  
         const outputFileName = `${data.userId}__${uuidv4()}.docx`      
         const content = fs

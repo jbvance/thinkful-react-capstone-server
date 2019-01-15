@@ -80,10 +80,6 @@ router.post('/', jwtAuth, async (req, res, next) => {
   }  
 });
 
-// router.get('/testing/', (req, res, next) => {
-//   console.log('FILE', s3.listFiles());
-// })
-
 // Get the Dpoa data for an existing user
 router.get('/:userId', jwtAuth, async (req, res, next) => {    
   

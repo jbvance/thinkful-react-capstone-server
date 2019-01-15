@@ -12,9 +12,7 @@ var path = require('path');
 const uuidv4 = require('uuid/v4');
 
 exports.makeDocx = (content) => {
-    const data = content.body;
-    console.log("DATA", data)
-
+    const data = content.body;    
         // initialize contingentAgents to an empty array to prevent an error
         // if there are no contingent Agents listed
         data['contingentAgents'] = [];
