@@ -10,10 +10,10 @@ const upload = (params, data) => {
   const s3 = new AWS.S3();
   s3.putObject(params, (err, data) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       throw (err);
     } else {
-      console.log("Succesfully uploaded data to bucket")
+      console.log("Succesfully uploaded data to bucket");
     }
   });
 }
@@ -35,8 +35,7 @@ module.exports = {
       if (err) {
         console.log("Error", err);
         throw(err);
-      } else {
-        console.log("Success", data.Contents);
+      } else {        
         return data.Contents;
       }
     });
@@ -94,22 +93,6 @@ module.exports = {
         }
       })
 
-    });
-  },
-
-  deleteFile: (filename) => {
-    const s3 = new AWS.S3();
-    var params = {
-        Bucket: process.env.S3_BUCKET,
-        Key: filename
-    };
-    s3.deleteObject(params, function (err, data) {
-        if (data) {
-            console.log("File deleted successfully");
-        }
-        else {
-            console.log("ERROR: " + err);
-        }
     });
   }
 }

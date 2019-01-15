@@ -93,8 +93,7 @@ describe('Dpoa endpoints', function() {
        
       )
       .catch(err => {         
-        if (err instanceof chai.AssertionError) {
-          console.log("ERROR", err);
+        if (err instanceof chai.AssertionError) {         
           throw err;
         }
         const res = err.response;
